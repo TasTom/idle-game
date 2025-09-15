@@ -1,0 +1,90 @@
+/* Layout principal */
+.desert-genesis {
+  background: linear-gradient(135deg, var(--primary-brown), var(--desert-orange), var(--light-brown));
+  min-height: 100vh;
+  color: var(--dark-text);
+}
+
+.game-header {
+  background: rgba(139, 69, 19, 0.9);
+  color: var(--white-text);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--dark-brown);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.status-bars {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.main-button {
+  background: var(--green);
+  border: none;
+  padding: 12px 24px;
+  color: var(--white-text);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.main-button.running {
+  background: var(--red);
+}
+
+.main-button:hover {
+  transform: scale(1.05);
+}
+
+.tab-navigation {
+  background: var(--overlay);
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.tab-navigation button {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid var(--primary-brown);
+  color: var(--white-text);
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-navigation button.active {
+  background: var(--primary-brown);
+  border-color: var(--secondary-brown);
+}
+
+.game-layout {
+  display: flex;
+  height: calc(100vh - 120px);
+}
+
+.sidebar {
+  width: 300px;
+  background: var(--overlay);
+  border-right: 2px solid var(--primary-brown);
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.main-content {
+  flex: 1;
+  background: rgba(255,255,255,0.1);
+  overflow-y: auto;
+  padding: 20px;
+}
