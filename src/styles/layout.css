@@ -8,11 +8,15 @@
 .game-header {
   background: rgba(139, 69, 19, 0.9);
   color: var(--white-text);
-  padding: 15px;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 3px solid var(--dark-brown);
+  /* ✅ AJOUT : Grid pour meilleur contrôle */
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 20px;
 }
 
 .header-controls {
@@ -21,11 +25,36 @@
   gap: 20px;
 }
 
+/* ✅ NOUVELLE SECTION CENTRALE */
+.header-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .status-bars {
   display: flex;
   gap: 20px;
   align-items: center;
 }
+
+.power-bar {
+  color: #FFD700;
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.research-bar {
+  color: #9C27B0;
+  border-color: rgba(156, 39, 176, 0.3);
+}
+
+.music-bar {
+  color: #4CAF50;
+  border-color: rgba(76, 175, 80, 0.3);
+  position: relative;
+}
+
 
 .main-button {
   background: var(--green);
@@ -87,4 +116,30 @@
   background: rgba(255,255,255,0.1);
   overflow-y: auto;
   padding: 20px;
+}
+
+/* ✅ RESPONSIVE */
+@media (max-width: 768px) {
+  .game-header {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .header-left {
+    justify-content: center;
+  }
+  
+  .status-bars {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .power-bar,
+  .research-bar,
+  .music-bar {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
 }

@@ -43,7 +43,7 @@ export const INITIAL_RESOURCES = {
   rubber: 0,
   
   // Énergie
-  power: 30,
+  power: 0,
   max_power: 30,
   
   // Recherche
@@ -358,4 +358,17 @@ export const MACHINE_BUILD_COSTS = {
   nuclear_plant: { supercomputer: 5, heavy_modular_frame: 25, concrete: 500 },
   research_lab: { reinforced_iron_plate: 10, rotor: 10, cable: 50 },
   quantum_computer: { supercomputer: 10, ai_limiter: 20, cable: 200 }
+};
+
+// src/data/gameData.js - Ajoute à la fin
+export const safeSubtract = (resources, resourceType, amount) => {
+  const current = resources[resourceType] || 0;
+  return Math.max(0, current - amount);
+};
+
+export const hasEnoughResources = (resources, requirements) => {
+  return Object.entries(requirements).every(([resource, amount]) => {
+    const available = resources[resource] || 0;
+    return available >= amount;
+  });
 };

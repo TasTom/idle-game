@@ -51,7 +51,7 @@ const ResourceOverview = ({ resources }) => {
       <div className="power-status">
         <h3>⚡ Énergie</h3>
         <div className="power-meter">
-          <span className="power-value">{resources.power} MW</span>
+          <span className="power-value">{resources.power}MW/{resources.max_power}MW</span>
         </div>
         <div className="research-points">
           <span>🔬 {Math.floor(resources.research_points)} RP</span>

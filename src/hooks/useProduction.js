@@ -11,7 +11,7 @@ export const useProduction = (isRunning, machines, setResources) => {
         let powerUsed = 0;
         let powerGenerated = 0;
         
-        // 1. Générer l'énergie
+        // 1. ✅ CALCULER L'ÉNERGIE PRODUITE
         Object.entries(machines).forEach(([machineType, count]) => {
           const machineData = MACHINES[machineType];
           if (machineData?.power_gen && count > 0) {
@@ -25,29 +25,29 @@ export const useProduction = (isRunning, machines, setResources) => {
           }
         });
         
-        newResources.power = powerGenerated;
-        
-        // 2. Extraction automatique de ressources
+        // 2. ✅ CALCULER LA CONSOMMATION D'ÉNERGIE DES MACHINES DE PRODUCTION
         Object.entries(machines).forEach(([machineType, count]) => {
           const machineData = MACHINES[machineType];
+          
+          // Machines d'extraction
           if (machineData?.produces && count > 0) {
             const powerCost = machineData.power * count;
-            if (powerGenerated >= powerCost) {
+            if (powerUsed + powerCost <= powerGenerated) {
+              powerUsed += powerCost;
+              
               machineData.produces.forEach(resource => {
                 const productionRate = 1;
                 newResources[resource] += productionRate * count;
               });
             }
           }
-        });
-
-        // 3. Production automatique intelligente
-        Object.entries(machines).forEach(([machineType, count]) => {
-          const machineData = MACHINES[machineType];
+          
+          // Machines de production automatique
           if (machineData?.auto_recipes && count > 0) {
             const powerCost = machineData.power * count;
             if (powerUsed + powerCost <= powerGenerated) {
-              powerUsed += powerCost;
+              // ✅ On peut utiliser cette énergie
+              const canUseEnergy = true;
               
               machineData.auto_recipes.forEach(recipeKey => {
                 const recipe = AUTO_RECIPES[recipeKey];
@@ -56,7 +56,10 @@ export const useProduction = (isRunning, machines, setResources) => {
                     ([resource, amount]) => newResources[resource] >= amount * count
                   );
                   
-                  if (canProduce) {
+                  if (canProduce && canUseEnergy) {
+                    // ✅ SEULEMENT maintenant on compte la consommation d'énergie
+                    powerUsed += powerCost;
+                    
                     Object.entries(recipe.inputs).forEach(([resource, amount]) => {
                       newResources[resource] -= amount * count;
                     });
@@ -69,11 +72,8 @@ export const useProduction = (isRunning, machines, setResources) => {
               });
             }
           }
-        });
-        
-        // 4. Génération de points de recherche
-        Object.entries(machines).forEach(([machineType, count]) => {
-          const machineData = MACHINES[machineType];
+          
+          // Machines de recherche
           if (machineData?.generates === 'research_points' && count > 0) {
             const powerCost = machineData.power * count;
             if (powerUsed + powerCost <= powerGenerated) {
@@ -82,6 +82,10 @@ export const useProduction = (isRunning, machines, setResources) => {
             }
           }
         });
+        
+        // 3. ✅ METTRE À JOUR LES VALEURS D'ÉNERGIE
+        newResources.power = powerUsed;        // Énergie consommée
+        newResources.max_power = powerGenerated; // Énergie produite
         
         return newResources;
       });

@@ -1,9 +1,321 @@
-/* Actions Manuelles */
-.manual-actions {
-  color: var(--white-text);
-  text-align: center;
+/* Variables CSS */
+:root {
+  --white-text: #E0E0E0;
+  --gold: #FFD700;
+  --primary-brown: #8B4513;
+  --secondary-brown: #A0522D;
+  --light-brown: #CD853F;
+  --red: #DC143C;
+  --blue: #4169E1;
+  --purple: #9370DB;
+  --overlay: rgba(0, 0, 0, 0.3);
 }
 
+/* ========== COMPATIBLE ANCIEN + NOUVEAU STYLE ========== */
+
+/* Style des actions manuelles */
+.manual-actions {
+  color: var(--white-text);
+  padding: 20px;
+}
+
+.melvor-style {
+  padding: 20px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.section-header h2 {
+  color: var(--gold);
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.section-header p {
+  color: #bbb;
+  font-size: 16px;
+}
+
+/* Sections de compétences */
+.skill-section {
+  margin-bottom: 40px;
+}
+
+.skill-title {
+  color: var(--gold);
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid var(--gold);
+  padding-bottom: 10px;
+}
+
+/* Grilles d'actions - UNIFIÉ */
+.actions-grid,
+.manual-buttons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* ========== CARTES D'ACTIONS UNIFIÉES ========== */
+.action-card,
+.manual-button {
+  background: linear-gradient(145deg, #2d3748, #4a5568);
+  border: 2px solid #4a5568;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--white-text);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.action-card:hover:not(.disabled):not(.locked),
+.manual-button:hover:not(:disabled):not(.locked) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  border-color: var(--gold);
+  filter: brightness(1.2);
+}
+
+.action-card.active,
+.manual-button.looping {
+  border-color: #00FF00 !important;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+  animation: pulse-active 2s infinite;
+}
+
+.action-card.disabled,
+.action-card.disabled-look,
+.manual-button.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(50%);
+  background: linear-gradient(135deg, #555, #777);
+  border-color: #999;
+}
+
+.action-card.no-resources {
+  border-color: #FF4444;
+  opacity: 0.7;
+  animation: resource-warning 2s infinite;
+}
+
+/* Couleurs par catégorie - UNIFIÉ */
+.action-card.mining,
+.action-card.extract,
+.manual-button.extract,
+.manual-button.mining {
+  background: linear-gradient(145deg, var(--primary-brown), var(--secondary-brown));
+  border-color: var(--light-brown);
+}
+
+.action-card.smithing,
+.action-card.smelt,
+.manual-button.smelt,
+.manual-button.smithing {
+  background: linear-gradient(145deg, var(--red), #B22222);
+  border-color: #FF6347;
+}
+
+.action-card.crafting,
+.action-card.craft,
+.manual-button.craft,
+.manual-button.crafting {
+  background: linear-gradient(145deg, var(--blue), #1E90FF);
+  border-color: #87CEEB;
+}
+
+.action-card.research,
+.manual-button.research {
+  background: linear-gradient(145deg, var(--purple), #8A2BE2);
+  border-color: #DDA0DD;
+}
+
+/* ========== CONTENU DES CARTES ========== */
+
+/* Icône d'action */
+.action-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+/* Nom d'action */
+.action-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+/* Description d'action */
+.action-description {
+  font-size: 13px;
+  color: #bbb;
+  line-height: 1.4;
+  flex-grow: 1;
+}
+
+/* Contenu des boutons anciens */
+.button-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+  position: relative;
+}
+
+.action-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Status de l'action */
+.action-status {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.action-status.looping {
+  background: rgba(0, 255, 0, 0.2);
+  color: #00FF00;
+  border: 1px solid #00FF00;
+}
+
+.action-status.no-resources {
+  background: rgba(255, 68, 68, 0.2);
+  color: #FF4444;
+  border: 1px solid #FF4444;
+}
+
+/* Indicateurs */
+.loop-indicator,
+.loop-icon {
+  color: #00FF00;
+  font-size: 16px;
+  animation: spin 2s linear infinite;
+}
+
+.no-resources-indicator {
+  color: #FF4444;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+/* ========== BARRES DE PROGRESSION ========== */
+.action-progress,
+.progress-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0 0 12px 12px;
+}
+
+.progress-overlay {
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00FF00, #32CD32);
+  transition: width 0.1s ease;
+  border-radius: 0 0 12px 12px;
+}
+
+.progress-bar {
+  width: 80%;
+  height: 8px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-text {
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ========== INDICATEUR DE BOUCLE ACTIVE ========== */
+.active-loop-indicator {
+  background: linear-gradient(135deg, rgba(0, 255, 0, 0.1), rgba(0, 255, 0, 0.05));
+  border: 2px solid #00FF00;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.loop-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loop-details .loop-action {
+  font-size: 16px;
+  font-weight: bold;
+  color: #00FF00;
+}
+
+.loop-details .loop-status {
+  font-size: 12px;
+  color: #bbb;
+}
+
+.stop-loop-btn {
+  background: linear-gradient(145deg, var(--red), #B22222);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.stop-loop-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(220, 20, 60, 0.4);
+}
+
+/* ========== ANCIENNE COMPATIBILITÉ ========== */
 .manual-categories {
   display: flex;
   flex-direction: column;
@@ -24,239 +336,69 @@
   text-align: center;
 }
 
-.manual-buttons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-
-.manual-button {
-  position: relative;
-  overflow: hidden;
-  min-height: 100px;
-  border: 2px solid;
-  color: var(--white-text);
-  padding: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.manual-button.locked {
-  background: linear-gradient(135deg, #555, #777);
-  border-color: #999;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.manual-button.in-progress {
-  cursor: not-allowed;
-  transform: none !important;
-}
-
-.manual-button.no-resources {
-  opacity: 0.7;
-  border-color: var(--red);
-}
-
-.manual-button.extract {
-  background: linear-gradient(135deg, var(--primary-brown), var(--secondary-brown));
-  border-color: var(--light-brown);
-}
-
-.manual-button.smelt {
-  background: linear-gradient(135deg, var(--red), #B22222);
-  border-color: #FF6347;
-}
-
-.manual-button.craft {
-  background: linear-gradient(135deg, var(--blue), #1E90FF);
-  border-color: #87CEEB;
-}
-
-.manual-button.research {
-  background: linear-gradient(135deg, var(--purple), #8A2BE2);
-  border-color: #DDA0DD;
-}
-
-.manual-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-  filter: brightness(1.2);
-}
-
-.manual-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
-.manual-button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
-  filter: grayscale(50%);
-}
-
-.manual-button small {
-  font-size: 11px;
-  font-weight: normal;
-  opacity: 0.9;
-  font-style: italic;
-}
-
-.manual-button.newly-unlocked {
-  animation: unlock-flash 2s ease;
-}
-
-.button-content {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  z-index: 2;
-  position: relative;
-}
-
-.action-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.tier-badge {
-  background: var(--gold);
-  color: var(--primary-brown);
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 10px;
-  font-weight: bold;
-  margin-left: 8px;
-}
-
-/* Progress overlay */
-.progress-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
-}
-
-.progress-bar {
-  width: 80%;
-  height: 8px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #4CAF50, #8BC34A);
-  border-radius: 4px;
-  transition: width 0.1s ease;
-  animation: progress-glow 2s infinite;
-}
-
-.progress-text {
-  color: var(--white-text);
-  font-size: 12px;
-  font-weight: bold;
-}
-
+/* ========== GUIDE DE PROGRESSION ========== */
 .progression-hint {
-  background: rgba(255, 215, 0, 0.1);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
   border: 2px solid var(--gold);
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 30px;
-  text-align: left;
+  border-radius: 15px;
+  padding: 25px;
+  margin-top: 40px;
 }
 
 .progression-hint h3 {
   color: var(--gold);
-  margin-bottom: 15px;
+  font-size: 22px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-.progression-hint ol {
-  padding-left: 20px;
-}
-
-.progression-hint li {
-  margin: 10px 0;
-  color: #E0E0E0;
-}
-
-.progression-hint strong {
-  color: var(--gold);
-}
-
-/* Effet de boucle automatique */
-.manual-button.looping {
-  border-color: #00FF00 !important;
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-  animation: loop-pulse 1s infinite;
-}
-
-@keyframes loop-pulse {
-  0%, 100% { 
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-  }
-  50% { 
-    box-shadow: 0 0 25px rgba(0, 255, 0, 0.8);
-  }
-}
-
-.manual-button.looping .button-content {
-  color: #00FF00;
-}
-
-/* Indicateur de boucle active */
-.active-loop-indicator {
-  background: rgba(0, 255, 0, 0.1);
-  border: 2px solid #00FF00;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 20px;
+.progression-steps {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: var(--white-text);
+  flex-direction: column;
+  gap: 12px;
 }
 
-.stop-loop-btn {
-  background: var(--red);
-  color: var(--white-text);
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
+.step {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
   transition: all 0.3s ease;
 }
 
-.stop-loop-btn:hover {
-  background: #FF4444;
-  transform: scale(1.05);
+.step:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.loop-indicator {
-  color: #00FF00;
-  font-size: 16px;
-  animation: spin 2s linear infinite;
+.step-number {
+  background: var(--gold);
+  color: var(--primary-brown);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.step-text {
+  color: #E0E0E0;
+  font-size: 15px;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes pulse-active {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.7);
+  }
 }
 
 @keyframes spin {
@@ -264,9 +406,57 @@
   to { transform: rotate(360deg); }
 }
 
-.action-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+@keyframes resource-warning {
+  0%, 100% {
+    border-color: #FF4444;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+  }
+  50% {
+    border-color: #FF8888;
+    box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .actions-grid,
+  .manual-buttons-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+  }
+  
+  .action-card,
+  .manual-button {
+    min-height: 120px;
+    padding: 15px;
+  }
+  
+  .action-icon {
+    font-size: 28px;
+  }
+  
+  .action-name {
+    font-size: 14px;
+  }
+  
+  .action-description {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions-grid,
+  .manual-buttons-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .progression-steps {
+    gap: 8px;
+  }
+  
+  .step {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
 }

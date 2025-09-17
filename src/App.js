@@ -4,16 +4,16 @@ import ProductionManager from './components/ProductionManager';
 import ResourceOverview from './components/ResourceOverview';
 import MusicPlayer from './components/MusicPlayer';
 import ManualActionsTab from './components/ManualActionsTab';
+import SkillsPanel from './components/SkillsPanel'; // ✅ NOUVEAU
 
-// Imports des données
-import { INITIAL_RESOURCES, TECH_TREE, MACHINE_BUILD_COSTS,  MACHINES   } from './data/gameData';
-
-// Imports des hooks
+// Imports des données et hooks
+import { INITIAL_RESOURCES, TECH_TREE, MACHINE_BUILD_COSTS, MACHINES } from './data/gameData';
 import { useManualActions } from './hooks/useManualActions';
 import { useProduction } from './hooks/useProduction';
 
-// Imports des styles
+// Styles
 import './styles/index.css';
+import './styles/melvor-interface.css'; // ✅ AJOUTER
 import './styles/layout.css';
 import './styles/components/ResourceOverview.css';
 import './styles/components/ProductionManager.css';
@@ -22,33 +22,28 @@ import './styles/components/ManualActions.css';
 import './styles/components/MusicPlayer.css';
 import './styles/responsive.css';
 
-
-
 function App() {
-  // États principaux
   const [resources, setResources] = useState(INITIAL_RESOURCES);
   const [machines, setMachines] = useState({ biomass_burner: 1 });
   const [unlockedTech, setUnlockedTech] = useState([]);
-  const [activeTab, setActiveTab] = useState('manual');
+  const [activeSkill, setActiveSkill] = useState('mining'); // ✅ NOUVEAU
   const [isRunning, setIsRunning] = useState(false);
   
-  // Actions débloquées
   const [unlockedActions, setUnlockedActions] = useState([
     'mine_iron', 'research',
     'smelt_iron', 'craft_iron_plate', 'craft_iron_rod', 'craft_screws'
   ]);
 
-  // Hook pour les actions manuelles (avec la logique de boucle)
   const {
     actionProgress,
     activeLoopAction,
     performManualAction,
     toggleActionLoop,
     stopActionLoop,
-    canPerformAction
+    canPerformAction,
+    cancelCurrentAction
   } = useManualActions(resources, setResources, unlockedActions, setUnlockedActions);
 
-  // Hook pour la production automatique
   useProduction(isRunning, machines, setResources);
 
   // Fonctions pour les machines
@@ -131,64 +126,85 @@ function App() {
   };
 
   return (
-    <div className="App desert-genesis">
-      <header className="game-header">
-        <h1>🏭 Desert Genesis Industries</h1>
-        <div className="status-bars">
-          <div className="power-bar">
-            ⚡ Power: {resources.power}MW | 🔬 Research: {Math.floor(resources.research_points)}
+    <div className="melvor-app">
+      {/* ✅ HEADER STYLE MELVOR */}
+      <header className="melvor-header">
+        <div className="header-left">
+          <h1>🏭 Desert Genesis</h1>
+          <div className="game-controls">
+            <button 
+              onClick={() => setIsRunning(!isRunning)}
+              className={`control-btn ${isRunning ? 'running' : 'paused'}`}
+            >
+              {isRunning ? '⏸️ Pause' : '▶️ Play'}
+            </button>
           </div>
         </div>
-        <div className="header-controls">
-          <button 
-            onClick={() => setIsRunning(!isRunning)}
-            className={`main-button ${isRunning ? 'running' : 'paused'}`}
-          >
-            {isRunning ? '⏸️ Pause Factory' : '▶️ Start Production'}
-          </button>
-          
-          <MusicPlayer />
+              {/* ✅ NOUVELLE SECTION CENTRALE AVEC STATS + MUSIQUE */}
+        <div className="header-center">
+          <div className="status-bars">
+            <div className="power-bar">
+              ⚡ Power: {resources.power}/{resources.max_power}MW
+            </div>
+            <div className="research-bar">
+              🔬 Research: {Math.floor(resources.research_points)}
+            </div>
+            {/* ✅ LECTEUR DE MUSIQUE INTÉGRÉ */}
+            <div className="music-bar">
+              <MusicPlayer />
+            </div>
+          </div>
+        </div>
+        <div className="header-right">
+       
         </div>
       </header>
 
-      <nav className="tab-navigation">
-        <button 
-          className={activeTab === 'manual' ? 'active' : ''}
-          onClick={() => setActiveTab('manual')}
-        >
-          ⛏️ Actions Manuelles
-        </button>
-        <button 
-          className={activeTab === 'production' ? 'active' : ''}
-          onClick={() => setActiveTab('production')}
-        >
-          🏭 Production ({Object.keys(machines).length} machines)
-        </button>
-        <button 
-          className={activeTab === 'research' ? 'active' : ''}
-          onClick={() => setActiveTab('research')}
-        >
-          🔬 Research (Tier {unlockedTech.length + 1})
-        </button>
-      </nav>
+      {/* ✅ LAYOUT PRINCIPAL STYLE MELVOR */}
+      <div className="melvor-main">
+        {/* Sidebar gauche - Skills */}
+        <aside className="skills-sidebar">
+          <SkillsPanel 
+            activeSkill={activeSkill}
+            setActiveSkill={setActiveSkill}
+            resources={resources}
+            unlockedActions={unlockedActions}
+            actionProgress={actionProgress}
+            activeLoopAction={activeLoopAction}
+            toggleActionLoop={toggleActionLoop}
+          />
+        </aside>
 
-      <div className="game-layout">
-        <div className="sidebar">
-          <ResourceOverview resources={resources} />
-        </div>
-
-        <div className="main-content">
-          {activeTab === 'manual' && (
-            <ManualActionsTab 
-              resources={resources}
-              unlockedActions={unlockedActions}
-              actionProgress={actionProgress}
-              activeLoopAction={activeLoopAction}
-              toggleActionLoop={toggleActionLoop}
-            />
+        {/* Contenu principal */}
+        <main className="main-content">
+          {activeSkill === 'mining' && (
+            <div className="skill-content">
+              <h2>⛏️ Mining</h2>
+              <div className="actions-grid">
+                {/* Actions de mining */}
+                <ManualActionsTab 
+                  resources={resources}
+                  unlockedActions={unlockedActions}
+                  actionProgress={actionProgress}
+                  activeLoopAction={activeLoopAction}
+                  toggleActionLoop={toggleActionLoop}
+                  canPerformAction={canPerformAction}
+                  skillType="mining"
+                />
+              </div>
+            </div>
           )}
 
-          {activeTab === 'production' && (
+          {activeSkill === 'smithing' && (
+            <div className="skill-content">
+              <h2>🔥 Smithing</h2>
+              <div className="actions-grid">
+                {/* Actions de smithing */}
+              </div>
+            </div>
+          )}
+
+          {activeSkill === 'production' && (
             <ProductionManager 
               machines={machines}
               machineData={MACHINES}
@@ -199,8 +215,8 @@ function App() {
               techTree={TECH_TREE}
             />
           )}
-          
-          {activeTab === 'research' && (
+
+          {activeSkill === 'research' && (
             <TechTree 
               techTree={TECH_TREE}
               unlockedTech={unlockedTech}
@@ -208,7 +224,12 @@ function App() {
               unlockTechnology={unlockTechnology}
             />
           )}
-        </div>
+        </main>
+
+        {/* Sidebar droite - Resources */}
+        <aside className="resources-sidebar">
+          <ResourceOverview resources={resources} />
+        </aside>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ const MusicPlayer = () => {
       file: "/music/music1.wav"
     },
     {
-      title: "Calm Factory",
+      title: "Calm Factory", 
       file: "/music/music2.wav"
     },
     {
@@ -26,11 +26,11 @@ const MusicPlayer = () => {
       file: "/music/music4.ogg"
     },
     {
-      title: "rhythm Flow",
+      title: "Rhythm Flow",
       file: "/music/music5.wav"
     },
     {
-      title: "Factory never sleeps",
+      title: "Factory Never Sleeps",
       file: "/music/FactoryNeverSleeps.mp3"
     }
   ];
@@ -41,38 +41,139 @@ const MusicPlayer = () => {
     }
   }, [volume]);
 
+  // ✅ CORRECTION : Gestion des erreurs audio
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const handleError = (e) => {
+        console.warn(`Erreur de lecture audio: ${playlist[currentSong]?.title}`, e);
+        // Passer à la chanson suivante en cas d'erreur
+        nextSong();
+      };
+
+      const handleCanPlay = () => {
+        console.log(`Audio prêt: ${playlist[currentSong]?.title}`);
+      };
+
+      audio.addEventListener('error', handleError);
+      audio.addEventListener('canplay', handleCanPlay);
+
+      return () => {
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('canplay', handleCanPlay);
+      };
+    }
+  }, [currentSong]);
+
+  // ✅ FONCTION pour toggle le dropdown
+  const toggleControls = (e) => {
+    e.stopPropagation(); // Empêcher la propagation
+    setShowControls(!showControls);
+  };
+
+  // ✅ FERMER le dropdown en cliquant ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Si on clique en dehors du lecteur, fermer les contrôles
+      if (!event.target.closest('.music-player')) {
+        setShowControls(false);
+      }
+    };
+
+    if (showControls) {
+      document.addEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showControls]);
+
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
+        setIsPlaying(false);
       } else {
-        audioRef.current.play();
+        // ✅ CORRECTION : Gestion des promesses
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch(error => {
+              console.warn('Erreur de lecture:', error);
+              setIsPlaying(false);
+            });
+        }
       }
-      setIsPlaying(!isPlaying);
     }
   };
+
+    const DropdownIcon = () => (
+    <svg viewBox="0 0 24 24" className="dropdown-icon">
+      <path fill="currentColor" d={showControls ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
+    </svg>
+  );
 
   const nextSong = () => {
     const next = (currentSong + 1) % playlist.length;
     setCurrentSong(next);
-    if (isPlaying) {
-      setTimeout(() => audioRef.current?.play(), 100);
-    }
+    // ✅ CORRECTION : Attendre le chargement
+    setTimeout(() => {
+      if (isPlaying && audioRef.current) {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.warn('Erreur de lecture chanson suivante:', error);
+            setIsPlaying(false);
+          });
+        }
+      }
+    }, 200);
   };
 
   const prevSong = () => {
     const prev = (currentSong - 1 + playlist.length) % playlist.length;
     setCurrentSong(prev);
-    if (isPlaying) {
-      setTimeout(() => audioRef.current?.play(), 100);
-    }
+    // ✅ CORRECTION : Attendre le chargement
+    setTimeout(() => {
+      if (isPlaying && audioRef.current) {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.warn('Erreur de lecture chanson précédente:', error);
+            setIsPlaying(false);
+          });
+        }
+      }
+    }, 200);
   };
 
   const handleSongEnd = () => {
     nextSong();
   };
 
-  // 🎨 NOUVEAUX COMPOSANTS D'ICÔNES STYLÉS
+  // ✅ CORRECTION : Fonction pour changer de chanson
+  const selectSong = (index) => {
+    setCurrentSong(index);
+    if (isPlaying) {
+      setTimeout(() => {
+        if (audioRef.current) {
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              console.warn('Erreur de lecture chanson sélectionnée:', error);
+              setIsPlaying(false);
+            });
+          }
+        }
+      }, 200);
+    }
+  };
+
+  // 🎨 COMPOSANTS D'ICÔNES STYLÉS
   const PlayIcon = () => (
     <svg viewBox="0 0 24 24" className="control-icon">
       <path fill="currentColor" d="M8 5v14l11-7z"/>
@@ -116,78 +217,99 @@ const MusicPlayer = () => {
         src={playlist[currentSong]?.file}
         onEnded={handleSongEnd}
         preload="metadata"
+        playsInline
+        crossOrigin="anonymous"
       />
       
       <div 
-        className="music-widget"
-        onMouseEnter={() => setShowControls(true)}
-        onMouseLeave={() => setShowControls(false)}
+        className={`music-widget ${showControls ? 'expanded' : ''}`} // ✅ NOUVELLE CLASSE
       >
-        {/* Mini player toujours visible */}
-        <div className="mini-player">
+        {/* ✅ Mini player - Cliquable pour ouvrir/fermer */}
+        <div className="mini-player" onClick={toggleControls}>
           <button 
-            onClick={togglePlay}
+            onClick={(e) => {
+              e.stopPropagation(); // Empêcher l'ouverture du dropdown
+              togglePlay();
+            }}
             className="play-button styled-button"
             title={isPlaying ? 'Pause' : 'Play'}
           >
             {isPlaying ? <PauseIcon /> : <PlayIcon />}
           </button>
+          
           <div className="song-info">
             <div className="song-header">
               <MusicNoteIcon />
               <span className="song-title">
                 {playlist[currentSong]?.title || 'No Music'}
               </span>
+              <span className="song-counter">
+                {currentSong + 1}/{playlist.length}
+              </span>
             </div>
-            <div className="song-counter">
-              {currentSong + 1} / {playlist.length}
-            </div>
+          </div>
+
+          {/* ✅ NOUVELLE ICÔNE : Flèche dropdown */}
+          <div className="dropdown-toggle">
+            <DropdownIcon />
           </div>
         </div>
 
-        {/* Contrôles étendus au survol */}
+        {/* ✅ Contrôles étendus - Affichage conditionnel avec classe */}
         {showControls && (
           <div className="extended-controls">
+            {/* Contrôles de lecture */}
             <div className="playback-controls">
-              <button onClick={prevSong} className="control-btn styled-control">
+              <button 
+                onClick={prevSong} 
+                className="control-btn styled-control"
+                title="Chanson précédente"
+              >
                 <PrevIcon />
               </button>
-              <button onClick={togglePlay} className="control-btn main-play styled-control">
+              <button 
+                onClick={togglePlay} 
+                className="control-btn main-play styled-control"
+                title={isPlaying ? 'Pause' : 'Play'}
+              >
                 {isPlaying ? <PauseIcon /> : <PlayIcon />}
               </button>
-              <button onClick={nextSong} className="control-btn styled-control">
+              <button 
+                onClick={nextSong} 
+                className="control-btn styled-control"
+                title="Chanson suivante"
+              >
                 <NextIcon />
               </button>
             </div>
             
+            {/* Contrôle de volume */}
             <div className="volume-control">
               <VolumeIcon />
               <input
                 type="range"
                 min="0"
                 max="1"
-                step="0.1"
+                step="0.05"
                 value={volume}
                 onChange={(e) => setVolume(parseFloat(e.target.value))}
                 className="volume-slider styled-slider"
+                title={`Volume: ${Math.round(volume * 100)}%`}
               />
               <span className="volume-percent">{Math.round(volume * 100)}%</span>
             </div>
             
+            {/* Playlist */}
             <div className="playlist">
               <div className="playlist-header">
-                <span>🎵 Playlist</span>
+                <span>🎵 Playlist ({playlist.length} tracks)</span>
               </div>
               {playlist.map((song, index) => (
                 <div
-                  key={index}
+                  key={`${index}-${song.title}`}
                   className={`playlist-item ${index === currentSong ? 'active' : ''}`}
-                  onClick={() => {
-                    setCurrentSong(index);
-                    if (isPlaying) {
-                      setTimeout(() => audioRef.current?.play(), 100);
-                    }
-                  }}
+                  onClick={() => selectSong(index)}
+                  title={`Jouer: ${song.title}`}
                 >
                   <div className="playlist-item-content">
                     <span className="track-number">{index + 1}</span>

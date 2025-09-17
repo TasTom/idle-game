@@ -12,7 +12,7 @@
   --blue: #4169E1;
   --purple: #9370DB;
   --dark-text: #2F1B14;
-  --white-text: white;
+  --white-text: #E0E0E0;
   --shadow: rgba(0, 0, 0, 0.3);
   --overlay: rgba(0, 0, 0, 0.3);
 }
@@ -25,6 +25,14 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ✅ STYLE DE BASE POUR L'APP */
+.melvor-app {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #e0e0e0;
+  min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
