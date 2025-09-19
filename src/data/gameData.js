@@ -1,374 +1,335 @@
+// data/gameData.js
 export const INITIAL_RESOURCES = {
-  // Ressources brutes
+  gold: 100,
+  gold_ingot: 0,
+  experience: 0,
+  mana: 50,
+  max_mana: 50,
+  energy: 100,
+  max_energy: 100,
+  // Minerais
   iron_ore: 0,
-  copper_ore: 0, 
-  coal: 0,
-  limestone: 0,
-  crude_oil: 0,
-  bauxite: 0,
-  uranium: 0,
-  
-  // Lingots de base
+  copper_ore: 0,
+  gold_ore: 0,
+  // Lingots
   iron_ingot: 0,
   copper_ingot: 0,
-  steel_ingot: 0,
-  aluminum_ingot: 0,
-  
-  // Composants de base
-  iron_plate: 0,
-  iron_rod: 0,
-  screws: 0,
-  wire: 0,
-  cable: 0,
-  concrete: 0,
-  
-  // Composants intermédiaires
-  reinforced_iron_plate: 0,
-  rotor: 0,
-  modular_frame: 0,
-  smart_plating: 0,
-  circuit_board: 0,
-  
-  // Composants avancés
-  heavy_modular_frame: 0,
-  computer: 0,
-  supercomputer: 0,
-  quantum_processor: 0,
-  ai_limiter: 0,
-  
-  // Liquides/Gaz
-  water: 0,
-  fuel: 0,
-  plastic: 0,
-  rubber: 0,
-  
-  // Énergie
-  power: 0,
-  max_power: 30,
-  
-  // Recherche
-  research_points: 0
+  gold_ingot: 0,
+  // Matériaux magiques
+  soul_essence: 0,
+  mana_crystal: 0,
+  // Matériaux spéciaux
+  desert_herb: 0,
+  sand_glass: 0,
+  venom_sac: 0,
+  golem_core: 0,
+  bandit_mask: 0
 };
 
-export const MACHINES = {
-  // Extraction automatique
-  miner_mk1: { 
-    name: "Miner Mk.1", 
-    tier: 1, 
-    power: 5, 
-    produces: ["iron_ore", "copper_ore", "limestone"], 
-    rate: 60 
+export const CHARACTER_STATS = {
+  hitpoints: { current: 100, max: 100, level: 1, xp: 0, xp_to_next: 100 },
+  attack: { level: 1, xp: 0, xp_to_next: 100 },
+  defense: { level: 1, xp: 0, xp_to_next: 100 },
+  mining: { level: 1, xp: 0, xp_to_next: 100 },
+  smithing: { level: 1, xp: 0, xp_to_next: 100 },
+  magic: { level: 1, xp: 0, xp_to_next: 100 },
+  woodcutting: { level: 1, xp: 0, xp_to_next: 100 },
+  fishing: { level: 1, xp: 0, xp_to_next: 100 }
+};
+
+// ===== ACTIONS ORGANISÉES PAR CATÉGORIE =====
+
+export const ACTION_CATEGORIES = {
+  mining: {
+    name: "⛏️ Mining",
+    color: "#8B4513",
+    description: "Extract valuable ores from the desert"
   },
-  miner_mk2: { 
-    name: "Miner Mk.2", 
-    tier: 2, 
-    power: 12, 
-    produces: ["iron_ore", "copper_ore", "limestone", "coal"], 
-    rate: 120 
+  smithing: {
+    name: "🔨 Smithing", 
+    color: "#FF6347",
+    description: "Forge weapons and tools"
   },
-  miner_mk3: { 
-    name: "Miner Mk.3", 
-    tier: 4, 
-    power: 30, 
-    produces: ["iron_ore", "copper_ore", "limestone", "coal", "bauxite"], 
-    rate: 240 
+  magic: {
+    name: "🔮 Magic",
+    color: "#9370DB", 
+    description: "Study arcane arts and meditate"
   },
-  oil_extractor: { 
-    name: "Oil Extractor", 
-    tier: 3, 
-    power: 40, 
-    produces: ["crude_oil"], 
-    rate: 120 
+  combat: {
+    name: "⚔️ Combat",
+    color: "#DC143C",
+    description: "Fight monsters and train"
   },
-  
-  // Production automatisée
-  smelter: { 
-    name: "Smelter", 
-    tier: 1, 
-    power: 4, 
-    auto_recipes: ["iron_ingot", "copper_ingot"] 
-  },
-  foundry: { 
-    name: "Foundry", 
-    tier: 2, 
-    power: 16, 
-    auto_recipes: ["steel_ingot", "aluminum_ingot"] 
-  },
-  constructor: { 
-    name: "Constructor", 
-    tier: 1, 
-    power: 4, 
-    auto_recipes: ["iron_plate", "iron_rod", "screws", "concrete"] 
-  },
-  assembler: { 
-    name: "Assembler", 
-    tier: 2, 
-    power: 15, 
-    auto_recipes: ["reinforced_iron_plate", "rotor", "smart_plating", "circuit_board"] 
-  },
-  manufacturer: { 
-    name: "Manufacturer", 
-    tier: 4, 
-    power: 55, 
-    auto_recipes: ["heavy_modular_frame", "computer", "supercomputer"] 
-  },
-  refinery: { 
-    name: "Refinery", 
-    tier: 3, 
-    power: 30, 
-    auto_recipes: ["plastic", "rubber", "fuel"] 
-  },
-  
-  // Générateurs d'énergie
-  biomass_burner: { 
-    name: "Biomass Burner", 
-    tier: 0, 
-    power_gen: 30
-  },
-  coal_generator: { 
-    name: "Coal Generator", 
-    tier: 2, 
-    power_gen: 75, 
-    fuel: "coal" 
-  },
-  fuel_generator: { 
-    name: "Fuel Generator", 
-    tier: 3, 
-    power_gen: 150, 
-    fuel: "fuel" 
-  },
-  nuclear_plant: { 
-    name: "Nuclear Power Plant", 
-    tier: 5, 
-    power_gen: 2500, 
-    fuel: "uranium" 
-  },
-  
-  // Machines spéciales
-  research_lab: { 
-    name: "Research Lab", 
-    tier: 1, 
-    power: 8, 
-    generates: "research_points", 
-    rate: 2 
-  },
-  quantum_computer: { 
-    name: "Quantum Computer", 
-    tier: 6, 
-    power: 200, 
-    generates: "research_points", 
-    rate: 50 
+  gathering: {
+    name: "🌿 Gathering",
+    color: "#228B22",
+    description: "Collect herbs and materials"
   }
 };
 
-export const AUTO_RECIPES = {
-  // Lingots
-  iron_ingot: { 
-    inputs: { iron_ore: 1 }, 
-    outputs: { iron_ingot: 1 }, 
-    time: 2 
+// ===== ÉQUIPEMENTS =====
+export const EQUIPMENT_TYPES = {
+  weapon: { name: "Weapon", emoji: "⚔️", slot: "weapon" },
+  armor: { name: "Armor", emoji: "🛡️", slot: "body" },
+  helmet: { name: "Helmet", emoji: "⛑️", slot: "helmet" },
+  boots: { name: "Boots", emoji: "👢", slot: "boots" },
+  gloves: { name: "Gloves", emoji: "🧤", slot: "gloves" },
+  accessory: { name: "Accessory", emoji: "💍", slot: "accessory" }
+};
+
+export const EQUIPMENT_ITEMS = {
+  // === ARMES ===
+  rusty_sword: {
+    name: "Rusty Sword",
+    type: "weapon",
+    emoji: "🗡️",
+    rarity: "common",
+    stats: { attack: 3, defense: 0 },
+    sell_price: 25,
+    craft_req: { iron_ingot: 1 },
+    unlock_req: { smithing: 5 }
   },
-  copper_ingot: { 
-    inputs: { copper_ore: 1 }, 
-    outputs: { copper_ingot: 1 }, 
-    time: 2 
+
+  iron_sword: {
+    name: "Iron Sword",
+    type: "weapon",
+    emoji: "⚔️",
+    rarity: "uncommon",
+    stats: { attack: 8, defense: 1 },
+    sell_price: 75,
+    craft_req: { iron_ingot: 3, soul_essence: 1 },
+    unlock_req: { smithing: 15 }
   },
-  steel_ingot: { 
-    inputs: { iron_ore: 3, coal: 3 }, 
-    outputs: { steel_ingot: 3 }, 
-    time: 4 
+
+  desert_blade: {
+    name: "Desert Blade",
+    type: "weapon",
+    emoji: "🌟",
+    rarity: "rare",
+    stats: { attack: 15, defense: 2, magic: 3 },
+    sell_price: 200,
+    craft_req: { gold_ingot: 2, soul_essence: 5, desert_herb: 3 },
+    unlock_req: { smithing: 30, magic: 20 }
   },
-  
-  // Composants de base
-  iron_plate: { 
-    inputs: { iron_ingot: 3 }, 
-    outputs: { iron_plate: 2 }, 
-    time: 6 
+
+  // === ARMURES ===
+  leather_vest: {
+    name: "Leather Vest",
+    type: "armor",
+    emoji: "🦺",
+    rarity: "common",
+    stats: { defense: 5, attack: 0 },
+    sell_price: 40,
+    craft_req: { iron_ore: 2, soul_essence: 1 },
+    unlock_req: { smithing: 8 }
   },
-  iron_rod: { 
-    inputs: { iron_ingot: 1 }, 
-    outputs: { iron_rod: 1 }, 
-    time: 4 
+
+  iron_armor: {
+    name: "Iron Armor",
+    type: "armor",
+    emoji: "🛡️",
+    rarity: "uncommon",
+    stats: { defense: 12, attack: 2 },
+    sell_price: 120,
+    craft_req: { iron_ingot: 5, soul_essence: 3 },
+    unlock_req: { smithing: 20 }
   },
-  screws: { 
-    inputs: { iron_rod: 1 }, 
-    outputs: { screws: 4 }, 
-    time: 6 
+
+  // === CASQUES ===
+  iron_helmet: {
+    name: "Iron Helmet",
+    type: "helmet",
+    emoji: "⛑️",
+    rarity: "common",
+    stats: { defense: 3, magic: 1 },
+    sell_price: 50,
+    craft_req: { iron_ingot: 2 },
+    unlock_req: { smithing: 12 }
   },
-  wire: { 
-    inputs: { copper_ingot: 1 }, 
-    outputs: { wire: 2 }, 
-    time: 4 
-  },
-  cable: { 
-    inputs: { wire: 2 }, 
-    outputs: { cable: 1 }, 
-    time: 2 
-  },
-  concrete: { 
-    inputs: { limestone: 3 }, 
-    outputs: { concrete: 1 }, 
-    time: 4 
-  },
-  
-  // Composants intermédiaires
-  reinforced_iron_plate: { 
-    inputs: { iron_plate: 6, screws: 12 }, 
-    outputs: { reinforced_iron_plate: 1 }, 
-    time: 12 
-  },
-  rotor: { 
-    inputs: { iron_rod: 5, screws: 25 }, 
-    outputs: { rotor: 1 }, 
-    time: 15 
-  },
-  modular_frame: { 
-    inputs: { reinforced_iron_plate: 3, iron_rod: 12 }, 
-    outputs: { modular_frame: 2 }, 
-    time: 60 
-  },
-  smart_plating: { 
-    inputs: { reinforced_iron_plate: 1, rotor: 1 }, 
-    outputs: { smart_plating: 1 }, 
-    time: 30 
-  },
-  circuit_board: { 
-    inputs: { copper_ingot: 2, plastic: 4 }, 
-    outputs: { circuit_board: 1 }, 
-    time: 8 
-  },
-  
-  // Composants avancés
-  heavy_modular_frame: { 
-    inputs: { modular_frame: 5, steel_ingot: 15, concrete: 5, screws: 100 }, 
-    outputs: { heavy_modular_frame: 1 }, 
-    time: 30 
-  },
-  computer: { 
-    inputs: { circuit_board: 10, cable: 9, plastic: 18, screws: 52 }, 
-    outputs: { computer: 1 }, 
-    time: 24 
-  },
-  supercomputer: { 
-    inputs: { computer: 2, ai_limiter: 2, plastic: 28, cable: 20 }, 
-    outputs: { supercomputer: 1 }, 
-    time: 32 
-  },
-  
-  // Liquides
-  plastic: { 
-    inputs: { crude_oil: 3 }, 
-    outputs: { plastic: 2 }, 
-    time: 6 
-  },
-  rubber: { 
-    inputs: { crude_oil: 3 }, 
-    outputs: { rubber: 2 }, 
-    time: 6 
-  },
-  fuel: { 
-    inputs: { crude_oil: 6 }, 
-    outputs: { fuel: 4 }, 
-    time: 6 
+
+  // === ACCESSOIRES ===
+  soul_ring: {
+    name: "Soul Ring",
+    type: "accessory",
+    emoji: "💍",
+    rarity: "rare",
+    stats: { magic: 8, attack: 2, defense: 2 },
+    sell_price: 300,
+    craft_req: { soul_essence: 10, gold_ingot: 1, mana_crystal: 2 },
+    unlock_req: { magic: 25, smithing: 25 }
   }
 };
 
-export const TECH_TREE = {
-  basic_production: {
-    name: "Basic Production",
-    tier: 1,
-    cost: { research_points: 50 },
-    unlocks: ["miner_mk1", "smelter", "constructor"],
-    prerequisites: [],
-    description: "Débloquer l'extraction et production de base"
+export const EQUIPMENT_RARITIES = {
+  common: { name: "Common", color: "#FFFFFF", glow: "#CCCCCC" },
+  uncommon: { name: "Uncommon", color: "#00FF00", glow: "#00DD00" },
+  rare: { name: "Rare", color: "#0080FF", glow: "#0066DD" },
+  epic: { name: "Epic", color: "#8000FF", glow: "#6600DD" },
+  legendary: { name: "Legendary", color: "#FF8000", glow: "#DD6600" }
+};
+
+export const MINING_ACTIONS = {
+  mine_iron: {
+    name: 'Mine Iron Ore',
+    time: 3000,
+    xp: { mining: 15, attack: 2 },
+    rewards: { iron_ore: 1 },
+    unlock_req: { mining: 1 }
   },
-  advanced_production: {
-    name: "Advanced Production", 
-    tier: 2,
-    cost: { smart_plating: 50, research_points: 200 },
-    unlocks: ["miner_mk2", "assembler", "coal_generator"],
-    prerequisites: ["basic_production"],
-    description: "Machines avancées et énergie au charbon"
-  },
-  oil_processing: {
-    name: "Oil Processing",
-    tier: 3, 
-    cost: { reinforced_iron_plate: 100, rotor: 25, research_points: 500 },
-    unlocks: ["oil_extractor", "refinery", "fuel_generator"],
-    prerequisites: ["advanced_production"],
-    description: "Traitement du pétrole et plastiques"
-  },
-  industrial_manufacturing: {
-    name: "Industrial Manufacturing",
-    tier: 4,
-    cost: { modular_frame: 50, computer: 25, research_points: 1000 },
-    unlocks: ["miner_mk3", "manufacturer", "research_lab"],
-    prerequisites: ["oil_processing"],
-    description: "Production industrielle et recherche avancée"
-  },
-  quantum_era: {
-    name: "Quantum Era",
-    tier: 5,
-    cost: { supercomputer: 10, heavy_modular_frame: 50, research_points: 5000 },
-    unlocks: ["nuclear_plant", "quantum_computer"],
-    prerequisites: ["industrial_manufacturing"],
-    description: "Technologie quantique et énergie nucléaire"
+  
+  mine_copper: {
+    name: 'Mine Copper Ore',
+    time: 3500,
+    xp: { mining: 20 },
+    rewards: { copper_ore: 1 },
+    unlock_req: { mining: 5 }
   }
 };
 
+export const SMITHING_ACTIONS = {
+  smelt_iron: {
+    name: 'Smelt Iron',
+    time: 4000,
+    xp: { smithing: 25 },
+    cost: { iron_ore: 1 },
+    rewards: { iron_ingot: 1 },
+    unlock_req: { smithing: 1 }
+  },
+
+  craft_rusty_sword: {
+    name: 'Craft Rusty Sword',
+    time: 8000,
+    xp: { smithing: 50 },
+    cost: { iron_ingot: 1 },
+    rewards: { rusty_sword: 1 },
+    unlock_req: { smithing: 5 }
+  },
+
+  craft_iron_sword: {
+    name: 'Craft Iron Sword',
+    time: 12000,
+    xp: { smithing: 80 },
+    cost: { iron_ingot: 3, soul_essence: 1 },
+    rewards: { iron_sword: 1 },
+    unlock_req: { smithing: 15 }
+  },
+
+  craft_leather_vest: {
+    name: 'Craft Leather Vest',
+    time: 10000,
+    xp: { smithing: 60 },
+    cost: { iron_ore: 2, soul_essence: 1 },
+    rewards: { leather_vest: 1 },
+    unlock_req: { smithing: 8 }
+  }
+};
+
+export const MAGIC_ACTIONS = {
+  meditate: {
+    name: 'Meditate for Mana',
+    time: 5000,
+    xp: { magic: 30 },
+    rewards: { mana: 10 },
+    unlock_req: { magic: 1 }
+  }
+};
+
+export const COMBAT_ACTIONS = {
+  train_attack: {
+    name: 'Combat Training',
+    time: 4000,
+    xp: { attack: 25, defense: 10 },
+    rewards: {},
+    unlock_req: { attack: 1 }
+  }
+};
+
+export const GATHERING_ACTIONS = {
+  gather_desert_herb: {
+    name: 'Gather Desert Herbs',
+    time: 3500,
+    xp: { magic: 10 },
+    rewards: { desert_herb: 1 },
+    unlock_req: { magic: 3 }
+  }
+};
+
+// ===== MONSTRES ===== 
+export const MONSTERS = {
+  sand_crawler: {
+    name: 'Sand Crawler',
+    emoji: '🦂',
+    level: 1,
+    hp: 25,
+    attack: 3,
+    defense: 1,
+    xp_reward: 15,
+    gold_reward: [3, 8], // min, max
+    loot_table: {
+      soul_essence: { chance: 0.3, amount: [1, 2] },
+      desert_herb: { chance: 0.15, amount: 1 }
+    },
+    unlock_req: { attack: 1 }
+  },
+
+  desert_scorpion: {
+    name: 'Desert Scorpion',
+    emoji: '🦂',
+    level: 5,
+    hp: 60,
+    attack: 8,
+    defense: 3,
+    xp_reward: 35,
+    gold_reward: [8, 15],
+    loot_table: {
+      soul_essence: { chance: 0.4, amount: [1, 3] },
+      desert_herb: { chance: 0.25, amount: [1, 2] },
+      venom_sac: { chance: 0.1, amount: 1 }
+    },
+    unlock_req: { attack: 5, defense: 3 }
+  },
+
+  sand_golem: {
+    name: 'Sand Golem',
+    emoji: '🗿',
+    level: 10,
+    hp: 150,
+    attack: 12,
+    defense: 8,
+    xp_reward: 75,
+    gold_reward: [15, 30],
+    loot_table: {
+      iron_ore: { chance: 0.6, amount: [2, 4] },
+      soul_essence: { chance: 0.5, amount: [2, 4] },
+      golem_core: { chance: 0.05, amount: 1 }
+    },
+    unlock_req: { attack: 10, defense: 5 }
+  },
+
+  desert_bandit: {
+    name: 'Desert Bandit',
+    emoji: '🏴‍☠️',
+    level: 15,
+    hp: 200,
+    attack: 18,
+    defense: 5,
+    xp_reward: 120,
+    gold_reward: [25, 50],
+    loot_table: {
+      gold: { chance: 0.8, amount: [10, 25] },
+      iron_ingot: { chance: 0.3, amount: [1, 3] },
+      bandit_mask: { chance: 0.08, amount: 1 }
+    },
+    unlock_req: { attack: 15, defense: 8 }
+  }
+};
+
+
+// Combiner toutes les actions pour la compatibilité
 export const ACTION_CONFIG = {
-  // TIER 0 - Disponible dès le début
-  mine_iron: { time: 2000, tier: 0 },
-  research: { time: 200, tier: 0 },
-  
-  // TIER 1 - Débloqué automatiquement au début
-  smelt_iron: { time: 3000, tier: 1 },
-  craft_iron_plate: { time: 4000, tier: 1 },
-  craft_iron_rod: { time: 3500, tier: 1 },
-  craft_screws: { time: 2000, tier: 1 },
-  
-  // TIER 2 - Débloqué avec "Basic Production"
-  mine_copper: { time: 2500, tier: 2 },
-  smelt_copper: { time: 3500, tier: 2 },
-  craft_wire: { time: 2500, tier: 2 },
-  craft_cable: { time: 3000, tier: 2 },
-  mine_limestone: { time: 200, tier: 2 },
-  craft_concrete: { time: 4500, tier: 2 },
-  
-  // TIER 3 - Débloqué avec "Advanced Production"  
-  mine_coal: { time: 3000, tier: 3 },
-  craft_steel: { time: 4000, tier: 3 },
-  craft_reinforced_iron_plate: { time: 6000, tier: 3 },
-  craft_rotor: { time: 5000, tier: 3 }
-};
-
-export const MACHINE_BUILD_COSTS = {
-  miner_mk1: { iron_plate: 5, concrete: 10 },
-  miner_mk2: { reinforced_iron_plate: 2, rotor: 2, concrete: 20 },
-  miner_mk3: { heavy_modular_frame: 1, computer: 1, concrete: 50 },
-  oil_extractor: { steel_ingot: 10, concrete: 40, cable: 20 },
-  smelter: { iron_plate: 5, iron_rod: 5 },
-  foundry: { steel_ingot: 10, concrete: 20 },
-  constructor: { reinforced_iron_plate: 2, cable: 8 },
-  assembler: { reinforced_iron_plate: 8, rotor: 4, cable: 10 },
-  manufacturer: { heavy_modular_frame: 2, computer: 2, cable: 50 },
-  refinery: { steel_ingot: 15, circuit_board: 10, cable: 30 },
-  coal_generator: { reinforced_iron_plate: 8, rotor: 8, cable: 15 },
-  fuel_generator: { heavy_modular_frame: 1, circuit_board: 5, rubber: 20 },
-  nuclear_plant: { supercomputer: 5, heavy_modular_frame: 25, concrete: 500 },
-  research_lab: { reinforced_iron_plate: 10, rotor: 10, cable: 50 },
-  quantum_computer: { supercomputer: 10, ai_limiter: 20, cable: 200 }
-};
-
-// src/data/gameData.js - Ajoute à la fin
-export const safeSubtract = (resources, resourceType, amount) => {
-  const current = resources[resourceType] || 0;
-  return Math.max(0, current - amount);
-};
-
-export const hasEnoughResources = (resources, requirements) => {
-  return Object.entries(requirements).every(([resource, amount]) => {
-    const available = resources[resource] || 0;
-    return available >= amount;
-  });
+  ...MINING_ACTIONS,
+  ...SMITHING_ACTIONS,
+  ...MAGIC_ACTIONS,
+  ...COMBAT_ACTIONS,
+  ...GATHERING_ACTIONS
 };

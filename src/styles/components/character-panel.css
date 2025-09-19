@@ -1,0 +1,138 @@
+/* ===== CHARACTER PANEL ===== */
+.character-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.character-avatar {
+  text-align: center;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 15px;
+  border: 2px solid var(--border-color);
+}
+
+.avatar-image {
+  font-size: 64px;
+  margin-bottom: 10px;
+}
+
+.character-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--gold);
+  margin-bottom: 5px;
+}
+
+.character-level {
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.combat-stats,
+.skill-stats,
+.equipment-stats {
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  padding: 15px;
+}
+
+.combat-stats h3,
+.skill-stats h3,
+.equipment-stats h3 {
+  color: var(--gold);
+  margin-bottom: 15px;
+  text-align: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 8px;
+  font-size: 16px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.stat-name {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.stat-level {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-weight: bold;
+  color: var(--gold);
+  min-width: 30px;
+  text-align: right;
+}
+
+.hp-bar,
+.xp-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--hp-red), #FF6B6B);
+  transition: width 0.3s ease;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #FFE66D);
+  transition: width 0.3s ease;
+}
+
+.xp-bar.small {
+  height: 8px;
+}
+
+.stat-text,
+.xp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.equipment-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.equipment-slot {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+}

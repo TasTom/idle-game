@@ -1,0 +1,37 @@
+/* ===== NAVIGATION ===== */
+.tab-navigation {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px 20px;
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid var(--border-color);
+  overflow-x: auto;
+  backdrop-filter: blur(5px);
+}
+
+.tab-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition-normal);
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-small);
+}
+
+.tab-button.active {
+  background: linear-gradient(145deg, var(--gold), var(--desert-orange));
+  color: var(--desert-brown);
+  border-color: var(--gold);
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+}

@@ -1,0 +1,92 @@
+/* ===== HEADER ===== */
+.game-header {
+  background: var(--bg-secondary);
+  backdrop-filter: blur(10px);
+  border-bottom: 3px solid var(--border-color);
+  padding: 15px 20px;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 30px;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-large);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-left h1 {
+  font-size: 24px;
+  background: linear-gradient(45deg, var(--gold), var(--desert-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.main-button {
+  @extend .button-primary;
+  white-space: nowrap;
+}
+
+.main-button.running {
+  @extend .button-danger;
+}
+
+.header-center {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.status-bars {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 2px solid var(--border-color);
+  backdrop-filter: blur(5px);
+}
+
+.stat-bar {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+  font-size: 13px;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-bar.hp { color: var(--hp-red); border-color: rgba(220, 20, 60, 0.4); }
+.stat-bar.mana { color: var(--mana-blue); border-color: rgba(30, 144, 255, 0.4); }
+.stat-bar.energy { color: var(--energy-green); border-color: rgba(50, 205, 50, 0.4); }
+.stat-bar.gold { color: var(--gold); border-color: rgba(255, 215, 0, 0.4); }
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.level-display {
+  background: rgba(255, 215, 0, 0.15);
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid var(--border-color);
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+}

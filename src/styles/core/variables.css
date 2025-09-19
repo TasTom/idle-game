@@ -1,0 +1,32 @@
+/* ===== VARIABLES CSS GLOBALES ===== */
+:root {
+  /* Couleurs principales */
+  --desert-sand: #F4A460;
+  --desert-orange: #D2691E;
+  --desert-brown: #8B4513;
+  --magic-purple: #9370DB;
+  --gold: #FFD700;
+  
+  /* Couleurs de statut */
+  --hp-red: #DC143C;
+  --mana-blue: #1E90FF;
+  --energy-green: #32CD32;
+  
+  /* Interface */
+  --bg-primary: linear-gradient(135deg, #2C1810 0%, #5D4E37 50%, #8B7355 100%);
+  --bg-secondary: rgba(139, 69, 19, 0.9);
+  --bg-card: rgba(244, 164, 96, 0.15);
+  --border-color: rgba(255, 215, 0, 0.4);
+  --text-primary: #F5DEB3;
+  --text-secondary: #DEB887;
+  
+  /* Ombres */
+  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-large: 0 8px 32px rgba(0, 0, 0, 0.5);
+  
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
